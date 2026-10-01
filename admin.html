@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>অ্যাডমিন প্যানেল — খবরের খবর ডিজিটাল পোর্টাল</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  
+  <style>
+    .admin-header {
+      background: #101728;
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .admin-title-badge {
+      background: #D32F2F;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .admin-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    @media (min-width: 1024px) {
+      .admin-grid {
+        grid-template-columns: 58% 42%;
+      }
+    }
+    .admin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    .card-header-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      background: #0B101E;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      transition: border-color 0.2s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: #E53935;
+      box-shadow: 0 0 0 2px rgba(229,57,53,0.2);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 640px) {
+      .form-row-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .form-row-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+    .editor-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      background: #0B101E;
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      padding: 8px 10px;
+    }
+    .tool-btn {
+      background: #1A243D;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tool-btn:hover {
+      background: #E53935;
+      color: #fff;
+      border-color: #E53935;
+    }
+    .rich-editor-box {
+      min-height: 240px;
+      max-height: 480px;
+      overflow-y: auto;
+      background: #0B101E;
+      border: 1px solid var(--border-color);
+      border-radius: 0 0 8px 8px;
+      padding: 14px;
+      color: #fff;
+      font-size: 16px;
+      line-height: 1.8;
+      outline: none;
+    }
+    .rich-editor-box:focus {
+      border-color: #E53935;
+    }
+    .rich-editor-box p {
+      margin-bottom: 12px;
+    }
+    .rich-editor-box h2 {
+      font-size: 20px;
+      color: #FFB300;
+      margin: 14px 0 8px;
+    }
+    .rich-editor-box blockquote {
+      border-left: 4px solid #E53935;
+      background: rgba(229,57,53,0.08);
+      padding: 8px 14px;
+      margin: 12px 0;
+      font-style: italic;
+      color: #CFD8DC;
+    }
+    .rich-editor-box ul {
+      padding-left: 24px;
+      margin-bottom: 12px;
+    }
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .tag-chip {
+      background: #1E293B;
+      color: #38BDF8;
+      border: 1px solid #334155;
+      padding: 3px 9px;
+      border-radius: 14px;
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    .preview-sticky {
+      position: sticky;
+      top: 80px;
+    }
+    .preview-badge {
+      background: #FFB300;
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .btn-submit {
+      background: linear-gradient(135deg, #E53935, #C62828);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(229,57,53,0.4);
+    }
+    .btn-secondary {
+      background: #1E293B;
+      color: #fff;
+      border: 1px solid var(--border-color);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+    table.articles-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    table.articles-table th, table.articles-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    table.articles-table th {
+      background: #0B101E;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+    table.articles-table tr:hover {
+      background: rgba(255,255,255,0.02);
+    }
+    .alert-box {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      display: none;
+    }
+    .alert-success {
+      background: rgba(46,125,50,0.2);
+      border: 1px solid #2E7D32;
+      color: #81C784;
+    }
+    .alert-error {
+      background: rgba(198,40,40,0.2);
+      border: 1px solid #C62828;
+      color: #EF9A9A;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Admin Bar -->
+  <header class="admin-header">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="/" class="site-logo" style="font-size: 19px;">
+        <span class="logo-badge">খবর</span>
+        <span class="logo-text">খবরের খবর</span>
+      </a>
+      <span class="admin-title-badge">ডেস্কটপ অ্যাডমিন প্যানেল</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="/" target="_blank" class="tool-btn" style="background:#0F172A; text-decoration: none;">
+        🌐 লাইভ পোর্টাল ভিউ
+      </a>
+      <a href="/download" class="tool-btn" style="background:#1E3A8A; text-decoration: none; color: #fff;">
+        📲 অ্যান্ড্রয়েড অ্যাপ
+      </a>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    
+    <!-- Status Alerts -->
+    <div id="alert-box" class="alert-box"></div>
+
+    <div class="admin-grid">
+      
+      <!-- LEFT: Editor Form -->
+      <div class="admin-card">
+        <h2 class="card-header-title">
+          <span>✍️ সংবাদ তৈরি ও সম্পাদনা</span>
+          <span style="font-size: 12px; font-weight: normal; color: #94A3B8; margin-left: auto;">Firestore লাইভ সিঙ্ক</span>
+        </h2>
+
+        <form id="article-form" onsubmit="event.preventDefault(); submitArticle();">
+          
+          <!-- Headline -->
+          <div class="form-group">
+            <label class="form-label" for="inp-title">সংবাদের মূল শিরোনাম *</label>
+            <input type="text" id="inp-title" class="form-control" placeholder="আকর্ষণীয় ও বস্তুনিষ্ঠ শিরোনাম লিখুন..." required oninput="updateLivePreview()">
+          </div>
+
+          <!-- Category and District Row -->
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="sel-category">সংবাদের বিভাগ (ক্যাটাগরি) *</label>
+              <select id="sel-category" class="form-control" onchange="onCategoryChange()">
+                <option value="district">জেলা বার্তা ও রাজ্য (District News)</option>
+                <option value="politics">রাজনীতি (Politics)</option>
+                <option value="sports">খেলাধুলা (Sports)</option>
+                <option value="entertainment">বিনোদন (Entertainment)</option>
+                <option value="business">বাণিজ্য (Business)</option>
+                <option value="national">জাতীয় (National)</option>
+                <option value="world">আন্তর্জাতিক (World)</option>
+                <option value="lifestyle">জীবনধারা (Lifestyle)</option>
+                <option value="panjika">দিনপঞ্জি ও রাশিফল (Panjika)</option>
+                <option value="video">ভিডিও বুলেটিন (Video News)</option>
+              </select>
+            </div>
+
+            <!-- 23 Districts Registry Dropdown -->
+            <div class="form-group" id="district-form-group">
+              <label class="form-label" for="sel-district">পশ্চিমবঙ্গের ২৩টি জেলা *</label>
+              <select id="sel-district" class="form-control" onchange="onDistrictChange()">
+                <option value="">-- জেলা নির্বাচন করুন --</option>
+                <!-- Injected dynamically from 23 districts registry -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Author and Source Row -->
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="inp-author">প্রতিবেদক / লেখক</label>
+              <input type="text" id="inp-author" class="form-control" value="নিজস্ব প্রতিবেদক" oninput="updateLivePreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inp-source">সংবাদের উৎস (Source)</label>
+              <input type="text" id="inp-source" class="form-control" value="খবরের খবর ডেস্ক">
+            </div>
+          </div>
+
+          <!-- Image URL -->
+          <div class="form-group">
+            <label class="form-label" for="inp-image">ফিচার্ড ছবির লিংক (Image URL)</label>
+            <input type="url" id="inp-image" class="form-control" placeholder="https://example.com/photo.jpg" oninput="updateLivePreview()">
+          </div>
+
+          <!-- Summary -->
+          <div class="form-group">
+            <label class="form-label" for="inp-summary">সংবাদের সারসংক্ষেপ (Short Summary)</label>
+            <textarea id="inp-summary" class="form-control" rows="2" placeholder="২-৩ লাইনে সংবাদের চুম্বক অংশ লিখুন..." oninput="updateLivePreview()"></textarea>
+          </div>
+
+          <!-- Toggles (Breaking, Trending) -->
+          <div style="display: flex; gap: 24px; margin-bottom: 16px; background: #0B101E; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fff; font-size: 14px;">
+              <input type="checkbox" id="chk-breaking" onchange="updateLivePreview()">
+              <span style="color: #FF5252; font-weight: bold;">🔴 ব্রেকিং নিউজ (Breaking)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fff; font-size: 14px;">
+              <input type="checkbox" id="chk-trending" onchange="updateLivePreview()">
+              <span style="color: #FFB300; font-weight: bold;">🔥 ট্রেন্ডিং খবর (Trending)</span>
+            </label>
+          </div>
+
+          <!-- Rich Text Content Editor (WYSIWYG - NO RAW HTML TAGS) -->
+          <div class="form-group">
+            <label class="form-label">বিস্তারিত প্রতিবেদন (Rich Text Editor — কোনো Raw HTML দেখা যাবে না)</label>
+            
+            <div class="editor-toolbar">
+              <button type="button" class="tool-btn" onclick="formatDoc('bold')" title="বোল্ড"><b>B</b> বোল্ড</button>
+              <button type="button" class="tool-btn" onclick="formatDoc('italic')" title="ইটালিক"><i>I</i> ইটালিক</button>
+              <button type="button" class="tool-btn" onclick="formatHeading('h2')" title="উপশিরোনাম">H2 উপশিরোনাম</button>
+              <button type="button" class="tool-btn" onclick="formatQuote()" title="কোট / উক্তি">❝ উক্তি</button>
+              <button type="button" class="tool-btn" onclick="formatDoc('insertUnorderedList')" title="বুলেট তালিকা">• বুলেট লিস্ট</button>
+              <button type="button" class="tool-btn" onclick="formatDoc('removeFormat')" title="ফরম্যাট মুছুন">🧹 ক্লিয়ার</button>
+            </div>
+
+            <div id="rich-editor" class="rich-editor-box" contenteditable="true" oninput="updateLivePreview()" placeholder="এখানে সংবাদের বিস্তারিত অংশ সুন্দরভাবে টাইপ করুন..."></div>
+          </div>
+
+          <!-- Dynamic Auto-Tags -->
+          <div class="form-group">
+            <label class="form-label">স্বয়ংক্রিয় ডাইনামিক ট্যাগ (Dynamic Auto-tags)</label>
+            <div id="tags-chips-container" class="tag-container">
+              <span class="tag-chip">#খবরেরখবর</span>
+              <span class="tag-chip">#তাজাখবর</span>
+            </div>
+            <input type="hidden" id="inp-tags" value="#খবরেরখবর, #তাজাখবর">
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button type="submit" id="btn-publish" class="btn-submit" style="flex: 2;">
+              <span>🚀 সংবাদ প্রকাশ করুন (Publish)</span>
+            </button>
+            <button type="button" class="btn-secondary" onclick="saveAsDraft()" style="flex: 1;">
+              💾 খসড়া সংরক্ষণ
+            </button>
+            <button type="button" class="btn-secondary" onclick="resetForm()">
+              রিসেট
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RIGHT: Live Reader View Preview ("পাঠক ভিউ প্রিভিউ") -->
+      <div class="admin-card preview-sticky">
+        <h2 class="card-header-title">
+          <span>👁️ পাঠক ভিউ প্রিভিউ (Reader View Preview)</span>
+          <span class="preview-badge">লাইভ</span>
+        </h2>
+        
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+          অ্যাডমিন এডিটরে যা লিখছেন, পাঠক অ্যাপ এবং ওয়েবসাইটে ঠিক নিচের ফরম্যাটেই দেখতে পাবেন:
+        </p>
+
+        <!-- Preview Container -->
+        <div style="background: #0B101E; border: 1px solid var(--border-color); border-radius: 10px; padding: 18px; max-height: 75vh; overflow-y: auto;">
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div style="display: flex; gap: 6px;">
+              <span id="prev-category" class="badge" style="background:#1E3A8A; color:#93C5FD; font-size:12px; padding:3px 8px; border-radius:4px; font-weight:600;">জেলা বার্তা</span>
+              <span id="prev-breaking" class="badge" style="background:#DC2626; color:#fff; font-size:12px; padding:3px 8px; border-radius:4px; font-weight:700; display:none;">ব্রেকিং</span>
+              <span id="prev-district" class="badge" style="background:#065F46; color:#A7F3D0; font-size:12px; padding:3px 8px; border-radius:4px; font-weight:600; display:none;"></span>
+            </div>
+            <span id="prev-date" style="font-size: 11.5px; color: var(--text-muted);">আজ</span>
+          </div>
+
+          <h1 id="prev-title" style="font-size: 21px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 10px;">
+            সংবাদের শিরোনাম এখানে প্রদর্শিত হবে
+          </h1>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 12.5px; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+            <span id="prev-author">✍️ নিজস্ব প্রতিবেদক</span>
+            <span>•</span>
+            <span id="prev-time">⏱ ২ মিনিট পড়ার সময়</span>
+          </div>
+
+          <div id="prev-image-box" style="margin-bottom: 14px; display: none;">
+            <img id="prev-image" src="" alt="Feature" style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 8px;">
+          </div>
+
+          <p id="prev-summary" style="font-size: 14px; color: #94A3B8; line-height: 1.6; margin-bottom: 16px; border-left: 3px solid #E53935; padding-left: 10px; font-weight: 500;">
+            সংবাদের সারসংক্ষেপ এখানে ফুটে উঠবে...
+          </p>
+
+          <div id="prev-content" style="font-size: 15px; color: #E2E8F0; line-height: 1.8;">
+            <p>বিস্তারিত সংবাদের প্রিভিউ এখানে পরিষ্কারভাবে ফরম্যাট করা টেক্সটে প্রদর্শিত হবে (কোনো HTML কোড বা ট্যাগ দেখা যাবে না)।</p>
+          </div>
+
+          <div id="prev-tags" class="tag-container" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 12px;"></div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LOWER SECTION: Manage Published Articles Table -->
+    <div class="admin-card" style="margin-top: 32px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+        <h2 style="font-size: 18px; font-weight: 700; color: #fff; margin: 0;">
+          📚 প্রকাশিত সংবাদের তালিকা (Firestore ডাটাবেস)
+        </h2>
+        <button type="button" class="tool-btn" onclick="loadAdminArticles()">🔄 রিফ্রেশ তালিকা</button>
+      </div>
+
+      <div class="table-container">
+        <table class="articles-table">
+          <thead>
+            <tr>
+              <th style="width: 80px;">ছবি</th>
+              <th>শিরোনাম</th>
+              <th>বিভাগ</th>
+              <th>জেলা</th>
+              <th>লেখক</th>
+              <th>তারিখ</th>
+              <th>স্ট্যাটাস</th>
+              <th style="text-align: right;">অ্যাকশন</th>
+            </tr>
+          </thead>
+          <tbody id="articles-table-body">
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                সংবাদ লোড হচ্ছে...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/panjika.js"></script>
+  <script>
+    const FIREBASE_API_KEY = "AIzaSyB9CiV5ReL_Q0numXq3SM9GVK4B5ZrV";
+    const FIREBASE_PROJECT_ID = "khoborer-khobor12415";
+    const FIRESTORE_BASE_URL = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/news`;
+
+    // Initialize 23 West Bengal districts into the selector
+    function initDistrictsDropdown() {
+      const select = document.getElementById('sel-district');
+      if (!window.PanjikaEngine || !window.PanjikaEngine.WEST_BENGAL_DISTRICTS) return;
+
+      select.innerHTML = '<option value="">-- কোনো নির্দিষ্ট জেলা নেই (সমগ্র পশ্চিমবঙ্গ) --</option>';
+      window.PanjikaEngine.WEST_BENGAL_DISTRICTS.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.id;
+        opt.textContent = `${d.name} (${d.english})`;
+        select.appendChild(opt);
+      });
+    }
+
+    // Dynamic Auto-Tags generation
+    function updateDynamicAutoTags() {
+      const distId = document.getElementById('sel-district').value;
+      const catId = document.getElementById('sel-category').value;
+      const title = document.getElementById('inp-title').value.trim();
+
+      const tags = new Set(['#খবরেরখবর', '#তাজাখবর']);
+
+      // 1. Add Category Tag
+      if (catId === 'politics') tags.add('#রাজনীতি');
+      else if (catId === 'sports') tags.add('#খেলা');
+      else if (catId === 'entertainment') tags.add('#বিনোদন');
+      else if (catId === 'business') tags.add('#বাণিজ্য');
+      else if (catId === 'panjika') tags.add('#দিনপঞ্জি');
+
+      // 2. Add District Tag if selected (from 23 districts registry)
+      if (distId && window.PanjikaEngine) {
+        const found = window.PanjikaEngine.WEST_BENGAL_DISTRICTS.find(d => d.id === distId);
+        if (found) {
+          tags.add(found.tag);
+          tags.add(`#${found.name}`);
+          tags.add('#জেলারখবর');
+        }
+      }
+
+      // Check title for district mentions
+      if (window.PanjikaEngine) {
+        window.PanjikaEngine.WEST_BENGAL_DISTRICTS.forEach(d => {
+          if (title.includes(d.name)) {
+            tags.add(d.tag);
+          }
+        });
+      }
+
+      const tagsArray = Array.from(tags);
+      const container = document.getElementById('tags-chips-container');
+      container.innerHTML = tagsArray.map(t => `<span class="tag-chip">${t}</span>`).join('');
+      document.getElementById('inp-tags').value = tagsArray.join(', ');
+
+      const prevTags = document.getElementById('prev-tags');
+      prevTags.innerHTML = tagsArray.map(t => `<span class="tag-chip" style="font-size:11px;">${t}</span>`).join('');
+    }
+
+    function onDistrictChange() {
+      updateDynamicAutoTags();
+      updateLivePreview();
+    }
+
+    function onCategoryChange() {
+      updateDynamicAutoTags();
+      updateLivePreview();
+    }
+
+    // Rich Text Formatting helper
+    function formatDoc(cmd, value = null) {
+      document.execCommand(cmd, false, value);
+      document.getElementById('rich-editor').focus();
+      updateLivePreview();
+    }
+
+    function formatHeading(tag) {
+      document.execCommand('formatBlock', false, tag);
+      document.getElementById('rich-editor').focus();
+      updateLivePreview();
+    }
+
+    function formatQuote() {
+      document.execCommand('formatBlock', false, 'blockquote');
+      document.getElementById('rich-editor').focus();
+      updateLivePreview();
+    }
+
+    // Live Preview update
+    function updateLivePreview() {
+      const title = document.getElementById('inp-title').value.trim();
+      const author = document.getElementById('inp-author').value.trim();
+      const summary = document.getElementById('inp-summary').value.trim();
+      const img = document.getElementById('inp-image').value.trim();
+      const isBreaking = document.getElementById('chk-breaking').checked;
+      const cat = document.getElementById('sel-category');
+      const catText = cat.options[cat.selectedIndex].text.split('(')[0].trim();
+      const dist = document.getElementById('sel-district');
+      const distText = dist.value ? dist.options[dist.selectedIndex].text.split('(')[0].trim() : '';
+
+      const editorContent = document.getElementById('rich-editor').innerHTML;
+
+      document.getElementById('prev-title').textContent = title || 'সংবাদের শিরোনাম এখানে প্রদর্শিত হবে';
+      document.getElementById('prev-author').textContent = `✍️ ${author || 'নিজস্ব প্রতিবেদক'}`;
+      document.getElementById('prev-category').textContent = catText;
+
+      const breakingEl = document.getElementById('prev-breaking');
+      breakingEl.style.display = isBreaking ? 'inline-block' : 'none';
+
+      const distEl = document.getElementById('prev-district');
+      if (distText) {
+        distEl.textContent = distText;
+        distEl.style.display = 'inline-block';
+      } else {
+        distEl.style.display = 'none';
+      }
+
+      const summaryEl = document.getElementById('prev-summary');
+      if (summary) {
+        summaryEl.textContent = summary;
+        summaryEl.style.display = 'block';
+      } else {
+        summaryEl.style.display = 'none';
+      }
+
+      const imgBox = document.getElementById('prev-image-box');
+      const prevImg = document.getElementById('prev-image');
+      if (img) {
+        prevImg.src = img;
+        imgBox.style.display = 'block';
+      } else {
+        imgBox.style.display = 'none';
+      }
+
+      // Safe live content preview without raw HTML tags
+      const contentEl = document.getElementById('prev-content');
+      if (editorContent && editorContent !== '<br>' && editorContent !== '<p></p>') {
+        contentEl.innerHTML = editorContent;
+      } else {
+        contentEl.innerHTML = '<p style="color:#64748B;">বিস্তারিত সংবাদের প্রিভিউ এখানে পরিষ্কারভাবে ফরম্যাট করা টেক্সটে প্রদর্শিত হবে (কোনো HTML কোড বা ট্যাগ দেখা যাবে না)।</p>';
+      }
+
+      updateDynamicAutoTags();
+    }
+
+    function showAlert(msg, isError = false) {
+      const box = document.getElementById('alert-box');
+      box.textContent = msg;
+      box.className = `alert-box ${isError ? 'alert-error' : 'alert-success'}`;
+      box.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        box.style.display = 'none';
+      }, 5000);
+    }
+
+    // Submit Article to Firestore
+    async function submitArticle(status = "PUBLISHED") {
+      const title = document.getElementById('inp-title').value.trim();
+      const editor = document.getElementById('rich-editor');
+      const content = editor.innerHTML.trim();
+      const summary = document.getElementById('inp-summary').value.trim();
+      const categoryId = document.getElementById('sel-category').value;
+      const districtId = document.getElementById('sel-district').value;
+      const author = document.getElementById('inp-author').value.trim() || 'নিজস্ব প্রতিবেদক';
+      const sourceName = document.getElementById('inp-source').value.trim() || 'খবরের খবর ডেস্ক';
+      const imageUrl = document.getElementById('inp-image').value.trim();
+      const isBreaking = document.getElementById('chk-breaking').checked;
+      const isTrending = document.getElementById('chk-trending').checked;
+      const tagsString = document.getElementById('inp-tags').value;
+
+      if (!title) {
+        showAlert('অনুগ্রহ করে সংবাদের শিরোনাম লিখুন।', true);
+        return;
+      }
+      if (!content || content === '<br>') {
+        showAlert('অনুগ্রহ করে সংবাদের মূল বিবরণ বা বিস্তারিত অংশ লিখুন।', true);
+        return;
+      }
+
+      const btn = document.getElementById('btn-publish');
+      btn.disabled = true;
+      btn.textContent = 'সংরক্ষণ করা হচ্ছে...';
+
+      // 23 District Bengali Name lookup
+      let districtBengaliName = "";
+      if (districtId && window.PanjikaEngine) {
+        const found = window.PanjikaEngine.WEST_BENGAL_DISTRICTS.find(d => d.id === districtId);
+        if (found) districtBengaliName = found.name;
+      }
+
+      const now = new Date();
+      const nowIso = now.toISOString();
+      const nowMillis = now.getTime();
+
+      const tagsArray = tagsString.split(',').map(s => s.trim()).filter(Boolean);
+
+      // Match Android Firestore schema 100%
+      const payload = {
+        fields: {
+          title: { stringValue: title },
+          headline: { stringValue: title },
+          content: { stringValue: content },
+          fullContent: { stringValue: content },
+          articleContent: { stringValue: content },
+          summary: { stringValue: summary || (editor.innerText.slice(0, 160) + '...') },
+          categoryId: { stringValue: categoryId },
+          category: { stringValue: categoryId },
+          districtId: { stringValue: districtId || "" },
+          districtName: { stringValue: districtBengaliName },
+          author: { stringValue: author },
+          sourceName: { stringValue: sourceName },
+          imageUrl: { stringValue: imageUrl },
+          image_url: { stringValue: imageUrl },
+          isBreaking: { booleanValue: isBreaking },
+          isTrending: { booleanValue: isTrending },
+          status: { stringValue: status },
+          published: { booleanValue: status === "PUBLISHED" },
+          publishTimestamp: { timestampValue: nowIso },
+          publishTimestampMillis: { integerValue: String(nowMillis) },
+          createdAt: { timestampValue: nowIso },
+          tags: {
+            arrayValue: {
+              values: tagsArray.map(t => ({ stringValue: t }))
+            }
+          }
+        }
+      };
+
+      try {
+        const res = await fetch(`${FIRESTORE_BASE_URL}?key=${FIREBASE_API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error(`Firestore Error: ${res.status} ${res.statusText}`);
+        }
+
+        showAlert(status === "PUBLISHED" ? '🎉 সংবাদটি সফলভাবে প্রকাশিত হয়েছে!' : 'খসড়া সফলভাবে সংরক্ষিত হয়েছে!');
+        resetForm();
+        loadAdminArticles();
+      } catch (err) {
+        console.error(err);
+        showAlert(`সংবাদ প্রকাশে ত্রুটি ঘটেছে: ${err.message}`, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 সংবাদ প্রকাশ করুন (Publish)';
+      }
+    }
+
+    function saveAsDraft() {
+      submitArticle("DRAFT");
+    }
+
+    function resetForm() {
+      document.getElementById('article-form').reset();
+      document.getElementById('rich-editor').innerHTML = '';
+      document.getElementById('sel-district').value = '';
+      updateDynamicAutoTags();
+      updateLivePreview();
+    }
+
+    // Load Articles for Admin Table
+    async function loadAdminArticles() {
+      const tbody = document.getElementById('articles-table-body');
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:24px;color:#94A3B8;">সংবাদ তালিকা রিফ্রেশ হচ্ছে...</td></tr>';
+
+      try {
+        const res = await fetch(`${FIRESTORE_BASE_URL}?key=${FIREBASE_API_KEY}`);
+        const data = await res.json();
+        const docs = data.documents || [];
+
+        if (docs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:24px;color:#94A3B8;">কোনো সংবাদ পাওয়া যায়নি।</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = docs.map(doc => {
+          const id = doc.name.split('/').pop();
+          const f = doc.fields || {};
+          const title = f.title ? f.title.stringValue : 'শিরোনামহীন';
+          const author = f.author ? f.author.stringValue : 'নিজস্ব প্রতিবেদক';
+          const cat = f.categoryId ? f.categoryId.stringValue : 'district';
+          const dist = f.districtName ? f.districtName.stringValue : (f.districtId ? f.districtId.stringValue : '—');
+          const img = f.imageUrl ? f.imageUrl.stringValue : '';
+          const status = f.status ? f.status.stringValue : 'PUBLISHED';
+          const isPublished = status === 'PUBLISHED';
+          const time = f.publishTimestamp ? new Date(f.publishTimestamp.timestampValue).toLocaleDateString('bn-BD') : 'আজ';
+
+          return `
+            <tr>
+              <td>
+                ${img ? `<img src="${img}" style="width:50px;height:36px;object-fit:cover;border-radius:4px;">` : '—'}
+              </td>
+              <td>
+                <div style="font-weight:600;color:#fff;max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                  ${title}
+                </div>
+              </td>
+              <td><span class="tag-chip" style="font-size:11px;">${cat}</span></td>
+              <td><span style="color:#6EE7B7;font-size:12px;">${dist}</span></td>
+              <td style="color:#94A3B8;font-size:12px;">${author}</td>
+              <td style="color:#94A3B8;font-size:12px;">${time}</td>
+              <td>
+                <span style="color:${isPublished ? '#4ADE80' : '#FBBF24'};font-size:12px;font-weight:bold;">
+                  ${isPublished ? '● প্রকাশিত' : '○ খসড়া'}
+                </span>
+              </td>
+              <td style="text-align:right;">
+                <a href="/article.html?id=${id}" target="_blank" class="tool-btn" style="padding:4px 8px;font-size:11px;text-decoration:none;">ভিউ</a>
+                <button type="button" class="tool-btn" style="background:#7F1D1D;color:#FECACA;border-color:#991B1B;padding:4px 8px;font-size:11px;" onclick="deleteArticle('${id}')">মুছুন</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#EF4444;padding:20px;">সংবাদ তালিকা লোড করতে ব্যর্থ: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function deleteArticle(id) {
+      if (!confirm('আপনি কি নিশ্চিত যে এই সংবাদটি মুছে ফেলতে চান?')) return;
+      try {
+        const res = await fetch(`${FIRESTORE_BASE_URL}/${id}?key=${FIREBASE_API_KEY}`, {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        showAlert('সংবাদটি সফলভাবে মুছে ফেলা হয়েছে।');
+        loadAdminArticles();
+      } catch (err) {
+        showAlert(`সংবাদ মুছতে সমস্যা হয়েছে: ${err.message}`, true);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDistrictsDropdown();
+      updateDynamicAutoTags();
+      loadAdminArticles();
+    });
+  </script>
+</body>
+</html>
